@@ -5,7 +5,7 @@ if (!location.hash) {
 const roomHash = location.hash.substring(1);
 
 // TODO: Replace with your own channel ID
-const drone = new ScaleDrone('K1iwrMk5SLxAwhLk');
+const drone = new ScaleDrone('yiS12Ts5RdNhebyM');
 // Room name needs to be prefixed with 'observable-'
 const roomName = 'observable-' + roomHash;
 const configuration = {
@@ -19,7 +19,7 @@ let pc;
 
 function onSuccess() {};
 function onError(error) {
-  console.log(error);
+  console.error(error);
 };
 
 drone.on('open', error => {
@@ -76,8 +76,6 @@ function startWebRTC(isOfferer) {
     }
   };
 
-
-if (navigator.mediaDevices.getUserMedia) {
   navigator.mediaDevices.getUserMedia({
     audio: true,
     video: true,
@@ -86,10 +84,7 @@ if (navigator.mediaDevices.getUserMedia) {
     localVideo.srcObject = stream;
     // Add your stream to be sent to the conneting peer
     stream.getTracks().forEach(track => pc.addTrack(track, stream));
-  })
-} else {
-  console.log("No media devices were found!")
-}
+  }, onError);
 
   // Listen to signaling data from Scaledrone
   room.on('data', (message, client) => {
