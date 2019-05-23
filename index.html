@@ -1,41 +1,101 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
+  <head>
+    <title>Vendingeo WebRTC</title>
+    <script src="https://static.opentok.com/v2/js/opentok.js"></script>
+  </head>
+
   <style>
-    body {
-      display: flex;
-      height: 100vh;
-      margin: 0;
-      align-items: center;
-      justify-content: center;
-      padding: 0 50px;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    body, html {
+        background-color: gray;
+        height: 100%;
     }
-    video {
-      max-width: calc(50% - 100px);
-      margin: 0 50px;
-      box-sizing: border-box;
-      border-radius: 2px;
-      padding: 0;
-      box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px, rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px, rgba(156, 172, 172, 0.2) 0px 16px 16px, rgba(156, 172, 172, 0.2) 0px 32px 32px, rgba(156, 172, 172, 0.2) 0px 64px 64px;
+
+    #videos {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
-    .copy {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 16px;
-      color: rgba(0, 0, 0, 0.5);
+
+    #subscriber {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+    }
+
+    #publisher {
+        position: absolute;
+        width: 360px;
+        height: 240px;
+        bottom: 10px;
+        left: 10px;
+        z-index: 100;
+        border: 3px solid white;
+        border-radius: 3px;
     }
   </style>
-</head>
-<body>
-  <div class="copy">Send your URL to a friend to start a video calls</div>
-  <video id="localVideo" autoplay muted></video>
-  <video id="remoteVideo" autoplay></video>
-  <script src="script.js"></script>
-</body>
+
+
+    <body>
+
+
+      <div id="videos">
+        <div id="subscriber"></div>
+        <div id="publisher"></div>
+    </div>
+
+
+    <!-- OpenTok.js library -->
+    <script>
+      // credentials
+      var apiKey = '46333492';
+      var sessionId = '2_MX40NjMzMzQ5Mn5-MTU1ODYyOTg0MTIwMn5COGFLZ000L0h0SDgwcXZVNW56SUlOcXd-fg';
+      var token = 'T1==cGFydG5lcl9pZD00NjMzMzQ5MiZzaWc9ZDVkNDFlZTQwOGNjZDkyMDlkZDU2ZmViOWI1MzRlNDY0N2UzZmNmMjpzZXNzaW9uX2lkPTJfTVg0ME5qTXpNelE1TW41LU1UVTFPRFl5T1RnME1USXdNbjVDT0dGTFowMDBMMGgwU0Rnd2NYWlZOVzU2U1VsT2NYZC1mZyZjcmVhdGVfdGltZT0xNTU4NjMwNDI0Jm5vbmNlPTAuNjQ1NjgzOTAzMjY4MTE1NCZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTYxMjIyNDIyJmNvbm5lY3Rpb25fZGF0YT10ZXN0JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9';
+
+      // Handling all of our errors here by alerting them
+      function handleError(error) {
+        if (error) {
+          alert(error.message);
+        }
+      }
+
+      // (optional) add server code here
+      initializeSession();
+
+      function initializeSession() {
+        var session = OT.initSession(apiKey, sessionId);
+
+        // Subscribe to a newly created stream
+        session.on('streamCreated', function(event) {
+          session.subscribe(event.stream, 'subscriber', {
+            insertMode: 'append',
+            width: '100%',
+            height: '100%'
+          }, handleError);
+        });
+
+        // Create a publisher
+        var publisher = OT.initPublisher('publisher', {
+          insertMode: 'append',
+          width: '100%',
+          height: '100%'
+        }, handleError);
+
+        // Connect to the session
+        session.connect(token, function(error) {
+          // If the connection is successful, initialize a publisher and publish to the session
+          if (error) {
+            handleError(error);
+          } else {
+            session.publish(publisher, handleError);
+          }
+        });
+      }
+    </script>
+  </body>
+
 </html>
