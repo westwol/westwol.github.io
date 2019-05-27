@@ -1,101 +1,26 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Vendingeo WebRTC</title>
-    <script src="https://static.opentok.com/v2/js/opentok.js"></script>
-  </head>
 
-  <style>
-    body, html {
-        background-color: gray;
-        height: 100%;
-    }
+<head>
+    <title> OpenTok Getting Started </title>
+    <link href="css/app.css" rel="stylesheet" type="text/css">
 
-    #videos {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
+    <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
 
-    #subscriber {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 10;
-    }
+    <!-- Polyfill for fetch API so that we can fetch the sessionId and token in IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js" charset="utf-8"></script>
+</head>
 
-    #publisher {
-        position: absolute;
-        width: 360px;
-        height: 240px;
-        bottom: 10px;
-        left: 10px;
-        z-index: 100;
-        border: 3px solid white;
-        border-radius: 3px;
-    }
-  </style>
+<body>
 
-
-    <body>
-
-
-      <div id="videos">
+    <div id="videos">
         <div id="subscriber"></div>
         <div id="publisher"></div>
     </div>
 
-
-    <!-- OpenTok.js library -->
-    <script>
-      // credentials
-      var apiKey = '46334702';
-      var sessionId = '1_MX40NjMzNDcwMn5-MTU1ODYzODMyOTkwNn5zcUdDYStXaTF1NjFPZXVZWEVtOS9CeWF-fg';
-      var token = 'T1==cGFydG5lcl9pZD00NjMzNDcwMiZzaWc9M2NiY2MxNTdhMDM3NTUwYWI2ZGM5MTUyZTZlN2U2YzI5YzJhMjIwNTpzZXNzaW9uX2lkPTFfTVg0ME5qTXpORGN3TW41LU1UVTFPRFl6T0RNeU9Ua3dObjV6Y1VkRFlTdFhhVEYxTmpGUFpYVlpXRVZ0T1M5Q2VXRi1mZyZjcmVhdGVfdGltZT0xNTU4NjM4MzU2Jm5vbmNlPTAuMDU4MTUwNTE2NTgwOTk0MTMmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTU2MTIzMDM1NCZjb25uZWN0aW9uX2RhdGE9YXNkYWQmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=';
-
-      // Handling all of our errors here by alerting them
-      function handleError(error) {
-        if (error) {
-          alert(error.message);
-        }
-      }
-
-      // (optional) add server code here
-      initializeSession();
-
-      function initializeSession() {
-        var session = OT.initSession(apiKey, sessionId);
-
-        // Subscribe to a newly created stream
-        session.on('streamCreated', function(event) {
-          session.subscribe(event.stream, 'subscriber', {
-            insertMode: 'append',
-            width: '100%',
-            height: '100%'
-          }, handleError);
-        });
-
-        // Create a publisher
-        var publisher = OT.initPublisher('publisher', {
-          insertMode: 'append',
-          width: '100%',
-          height: '100%'
-        }, handleError);
-
-        // Connect to the session
-        session.connect(token, function(error) {
-          // If the connection is successful, initialize a publisher and publish to the session
-          if (error) {
-            handleError(error);
-          } else {
-            session.publish(publisher, handleError);
-          }
-        });
-      }
-    </script>
-  </body>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+</body>
 
 </html>
