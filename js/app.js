@@ -31,7 +31,7 @@ function initializeSession() {
   // caster here!
   // initialize the publisher
   var publisherOptions = {
-    name: 'Vendingeo MASTER',
+    name: 'Master',
     insertMode: 'append',
     width: '100%',
     height: '100%'
