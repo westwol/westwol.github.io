@@ -12,13 +12,14 @@ function handleError(error) {
 
 function initializeSession() {
   var session = OT.initSession(apiKey, sessionId);
+  var userName = 'Vendingeo #' + Math.floor(Math.random() * 1000);
 
   // Subscribe to a newly created stream
   session.on('streamCreated', function streamCreated(event) {
     var subscriberOptions = {
       insertMode: 'append',
-      width: '100%',
-      height: '100%'
+      width: '50%',
+      height: '50%'
     };
     session.subscribe(event.stream, 'subscriber', subscriberOptions, handleError);
   });
@@ -27,11 +28,14 @@ function initializeSession() {
     console.log('You were disconnected from the session.', event.reason);
   });
 
+
+  // caster here!
   // initialize the publisher
   var publisherOptions = {
+    name: userName,
     insertMode: 'append',
-    width: '50%',
-    height: '50%'
+    width: '100%',
+    height: '100%'
   };
   var publisher = OT.initPublisher('publisher', publisherOptions, handleError);
 
