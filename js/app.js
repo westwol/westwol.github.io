@@ -12,7 +12,6 @@ function handleError(error) {
 
 function initializeSession() {
   var session = OT.initSession(apiKey, sessionId);
-  var userName = 'Vendingeo #' + Math.floor(Math.random() * 1000);
 
   // Subscribe to a newly created stream
   session.on('streamCreated', function streamCreated(event) {
@@ -32,7 +31,7 @@ function initializeSession() {
   // caster here!
   // initialize the publisher
   var publisherOptions = {
-    name: userName,
+    name: 'Vendingeo MASTER',
     insertMode: 'append',
     width: '100%',
     height: '100%'
